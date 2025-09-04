@@ -3,7 +3,8 @@
     "allow": [
       "Bash(streamlit run:*)",
       "Bash(pip install:*)",
-      "Bash(python -m streamlit run:*)"
+      "Bash(python -m streamlit run:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []
