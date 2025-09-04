@@ -1,7 +1,7 @@
 # Development tools
-/.claude
-/.devcontainer
-/.vscode
+.claude/
+.devcontainer/
+.vscode/
 
 # Python
 __pycache__/
