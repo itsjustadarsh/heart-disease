@@ -107,22 +107,21 @@ restecg_map = {"Normal": 0, "ST-T Abnormality": 1, "LVH": 2}
 angina_map = {"No": 0, "Yes": 1}
 slope_map = {"Up": 0, "Flat": 1, "Down": 2}
 
-features = np.array([[
-    age,
-    sex_map[sex],
-    cp_map[cp],
-    resting_bp,
-    cholesterol,
-    fasting_bs,
-    restecg_map[restecg],
-    max_hr,
-    angina_map[exercise_angina],
-    oldpeak,
-    slope_map[st_slope]
-]])
-
 # ------------------- PREDICTION -------------------
 if submitted:
+    features = np.array([[
+        age,
+        sex_map[sex],
+        cp_map[cp],
+        resting_bp,
+        cholesterol,
+        fasting_bs,
+        restecg_map[restecg],
+        max_hr,
+        angina_map[exercise_angina],
+        oldpeak,
+        slope_map[st_slope]
+    ]])
     model = loaded_models[model_choice]
     prediction = model.predict(features)[0]
 
