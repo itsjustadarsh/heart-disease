@@ -30,36 +30,167 @@ loaded_models = load_models()
 
 # Page config with custom favicon
 st.set_page_config(
-    page_title="❤️ AI Heart Disease Predictor", 
+    page_title="❤️ Heart Sense", 
     page_icon="❤️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom sidebar width CSS
+# Responsive sidebar CSS with mobile support
 st.markdown(
     """
     <style>
-    .css-1d391kg {
-        width: 450px;
+    /* Desktop sidebar styling */
+    @media (min-width: 769px) {
+        section[data-testid="stSidebar"] {
+            width: 350px !important;
+            min-width: 350px !important;
+            max-width: 350px !important;
+        }
+        section[data-testid="stSidebar"] > div {
+            width: 350px !important;
+            min-width: 350px !important;
+            max-width: 350px !important;
+        }
+        section[data-testid="stSidebar"] .main {
+            width: 350px !important;
+            max-width: 350px !important;
+        }
+        section[data-testid="stSidebar"] .block-container {
+            width: 350px !important;
+            max-width: 350px !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        .css-1d391kg, .css-1lcbmhc, .css-17eq0hr, 
+        .css-1cypcdb, .css-1adrfps, .css-6qob1r, .css-1544g2n {
+            width: 350px !important;
+            max-width: 350px !important;
+        }
     }
-    .css-1lcbmhc {
-        width: 450px;
+    
+    /* Tablet and mobile sidebar styling */
+    @media (max-width: 768px) {
+        section[data-testid="stSidebar"] {
+            width: 280px !important;
+            min-width: 280px !important;
+            max-width: 280px !important;
+        }
+        section[data-testid="stSidebar"] > div {
+            width: 280px !important;
+            min-width: 280px !important;
+            max-width: 280px !important;
+        }
+        section[data-testid="stSidebar"] .main {
+            width: 280px !important;
+            max-width: 280px !important;
+        }
+        section[data-testid="stSidebar"] .block-container {
+            width: 280px !important;
+            max-width: 280px !important;
+            padding-left: 0.8rem !important;
+            padding-right: 0.8rem !important;
+        }
+        .css-1d391kg, .css-1lcbmhc, .css-17eq0hr, 
+        .css-1cypcdb, .css-1adrfps, .css-6qob1r, .css-1544g2n {
+            width: 280px !important;
+            max-width: 280px !important;
+        }
     }
-    .css-17eq0hr {
-        width: 450px;
+    
+    /* Small mobile devices */
+    @media (max-width: 480px) {
+        section[data-testid="stSidebar"] {
+            width: 250px !important;
+            min-width: 250px !important;
+            max-width: 250px !important;
+        }
+        section[data-testid="stSidebar"] > div {
+            width: 250px !important;
+            min-width: 250px !important;
+            max-width: 250px !important;
+        }
+        section[data-testid="stSidebar"] .main {
+            width: 250px !important;
+            max-width: 250px !important;
+        }
+        section[data-testid="stSidebar"] .block-container {
+            width: 250px !important;
+            max-width: 250px !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
     }
-    section[data-testid="stSidebar"] {
-        width: 450px !important;
+    
+    /* Improve sidebar toggle button */
+    button[kind="header"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
+        padding: 0.5rem !important;
+        transition: all 0.3s ease !important;
+        position: relative !important;
+        overflow: hidden !important;
     }
-    section[data-testid="stSidebar"] > div {
-        width: 450px !important;
+    
+    button[kind="header"]:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: scale(1.05) !important;
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1) !important;
     }
-    .css-1cypcdb {
-        width: 450px !important;
+    
+    button[kind="header"]:active {
+        transform: scale(0.95) !important;
     }
-    .css-1adrfps {
-        width: 450px !important;
+    
+    /* Fix sidebar close button positioning */
+    .css-1rs6os {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Sidebar overlay for mobile */
+    @media (max-width: 768px) {
+        section[data-testid="stSidebar"][aria-expanded="true"] {
+            position: fixed !important;
+            z-index: 999999 !important;
+            top: 0 !important;
+            left: 0 !important;
+            height: 100vh !important;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        /* Add backdrop when sidebar is open on mobile */
+        section[data-testid="stSidebar"][aria-expanded="true"]::before {
+            content: '' !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            z-index: -1 !important;
+        }
+        
+        /* Smooth sidebar animation */
+        section[data-testid="stSidebar"] {
+            transform: translateX(-100%) !important;
+            transition: transform 0.3s ease !important;
+        }
+        
+        section[data-testid="stSidebar"][aria-expanded="true"] {
+            transform: translateX(0) !important;
+        }
+    }
+    
+    /* Enhanced toggle button for better accessibility */
+    button[kind="header"] svg {
+        transition: transform 0.3s ease !important;
+    }
+    
+    button[kind="header"]:hover svg {
+        transform: rotate(180deg) !important;
     }
     </style>
     """,
@@ -318,6 +449,98 @@ st.markdown(
         
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #0d1421 0%, #1a1a2e 100%) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        /* Force consistent width for all sidebar elements */
+        section[data-testid="stSidebar"] * {
+            box-sizing: border-box !important;
+        }
+        
+        section[data-testid="stSidebar"] .stMarkdown,
+        section[data-testid="stSidebar"] .stSelectbox,
+        section[data-testid="stSidebar"] .element-container,
+        section[data-testid="stSidebar"] .stButton,
+        section[data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        section[data-testid="stSidebar"] .stSelectbox > div,
+        section[data-testid="stSidebar"] .stSelectbox > div > div {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        /* Mobile-first responsive design */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 1rem !important;
+                margin: 0.5rem 0 1rem 0 !important;
+            }
+            
+            .main-header h1 {
+                font-size: 2.5rem !important;
+            }
+            
+            .main-header p {
+                font-size: 1rem !important;
+            }
+            
+            .glass-card, .info-section {
+                padding: 1rem !important;
+                margin: 0.5rem 0 !important;
+            }
+            
+            .metric-card {
+                padding: 1rem !important;
+            }
+            
+            .metric-number {
+                font-size: 2rem !important;
+            }
+            
+            .result-box {
+                padding: 1rem !important;
+                margin: 1rem 0 !important;
+            }
+            
+            /* Make form responsive */
+            .stForm {
+                padding: 0.5rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 2rem !important;
+            }
+            
+            .main-header p {
+                font-size: 0.9rem !important;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.5rem !important;
+            }
+            
+            .metric-number {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        /* Improve sidebar on mobile */
+        @media (max-width: 768px) {
+            section[data-testid="stSidebar"] .metric-card {
+                margin-bottom: 0.5rem !important;
+            }
+            
+            section[data-testid="stSidebar"] .health-tip {
+                font-size: 0.8rem !important;
+                padding: 0.7rem !important;
+                margin: 0.3rem 0 !important;
+            }
         }
         
         h1, h2, h3, h4 {
@@ -328,16 +551,82 @@ st.markdown(
             color: white;
         }
         
+        /* Fix sidebar scrolling on mobile */
+        @media (max-width: 768px) {
+            section[data-testid="stSidebar"] {
+                overflow-y: auto !important;
+                max-height: 100vh !important;
+            }
+        }
+        
     </style>
     """,
     unsafe_allow_html=True,
+)
+
+# Add JavaScript for better sidebar functionality
+st.markdown(
+    """
+    <script>
+    // Improve sidebar functionality
+    function initializeSidebar() {
+        // Add click outside to close functionality on mobile
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('section[data-testid="stSidebar"]');
+                const toggleButton = document.querySelector('button[kind="header"]');
+                
+                if (sidebar && toggleButton && 
+                    !sidebar.contains(event.target) && 
+                    !toggleButton.contains(event.target) &&
+                    sidebar.getAttribute('aria-expanded') === 'true') {
+                    // Close sidebar by clicking the toggle button
+                    toggleButton.click();
+                }
+            }
+        });
+        
+        // Add escape key to close sidebar
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const sidebar = document.querySelector('section[data-testid="stSidebar"]');
+                const toggleButton = document.querySelector('button[kind="header"]');
+                
+                if (sidebar && toggleButton && 
+                    sidebar.getAttribute('aria-expanded') === 'true') {
+                    toggleButton.click();
+                }
+            }
+        });
+        
+        // Smooth transition for sidebar
+        const sidebar = document.querySelector('section[data-testid="stSidebar"]');
+        if (sidebar) {
+            sidebar.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeSidebar);
+    } else {
+        initializeSidebar();
+    }
+    
+    // Re-initialize on Streamlit rerun
+    window.addEventListener('load', function() {
+        setTimeout(initializeSidebar, 100);
+    });
+    </script>
+    """,
+    unsafe_allow_html=True
 )
 
 # Header Section
 st.markdown(
     """
     <div class="main-header">
-        <h1>🫀 AI Heart Disease Predictor</h1>
+        <h1>🫀 Heart Sense</h1>
         <p>Advanced ML-powered cardiovascular risk assessment platform</p>
     </div>
     """,
@@ -399,7 +688,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["🔍 Prediction", "📈 Analytics", "ℹ️ I
 
 with tab1:
     # Patient Information Form
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    
     st.markdown("### 👤 Patient Information")
     
     with st.form("patient_form"):
@@ -709,7 +998,7 @@ st.markdown("---")
 st.markdown(
     f"""
     <div class="glass-card" style="text-align: center;">
-        <h4>AI Heart Disease Predictor</h4>
+        <h4>Heart Sense</h4>
         <p><b>Development Team:</b> Arindam Singh (E23CSEU1171) • Adarsh (E23CSEU1189) • Yashvardhan Dhaka (E23CSEU1192)</p>
         <p style="font-size: 0.9rem; opacity: 0.7;">
             Last Updated: {datetime.now().strftime("%B %d, %Y")}
