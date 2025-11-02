@@ -9,10 +9,10 @@ import pandas as pd
 
 # Load models
 MODELS = {
-    "🌲 Random Forest": "RandomForest.pkl",
-    "🌳 Decision Tree": "DecisionTree.pkl", 
-    "🎯 SVM": "SVM_Model.pkl",
-    "📊 Logistic Regression": "LogisticR.pkl",
+    "Random Forest": "RandomForest.pkl",
+    "Decision Tree": "DecisionTree.pkl",
+    "SVM": "SVM_Model.pkl",
+    "Logistic Regression": "LogisticR.pkl",
 }
 
 @st.cache_resource
@@ -30,8 +30,8 @@ loaded_models = load_models()
 
 # Page config with custom favicon
 st.set_page_config(
-    page_title="❤️ Heart Sense", 
-    page_icon="❤️",
+    page_title="Heart Disease Prediction",
+    page_icon="⚕️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -43,80 +43,91 @@ st.markdown(
     /* Desktop sidebar styling */
     @media (min-width: 769px) {
         section[data-testid="stSidebar"] {
-            width: 350px !important;
-            min-width: 350px !important;
-            max-width: 350px !important;
+            width: 240px !important;
+            min-width: 240px !important;
+            max-width: 240px !important;
         }
         section[data-testid="stSidebar"] > div {
-            width: 350px !important;
-            min-width: 350px !important;
-            max-width: 350px !important;
+            width: 240px !important;
+            min-width: 240px !important;
+            max-width: 240px !important;
         }
         section[data-testid="stSidebar"] .main {
-            width: 350px !important;
-            max-width: 350px !important;
+            width: 240px !important;
+            max-width: 240px !important;
         }
         section[data-testid="stSidebar"] .block-container {
-            width: 350px !important;
-            max-width: 350px !important;
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
+            width: 240px !important;
+            max-width: 240px !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
         }
-        .css-1d391kg, .css-1lcbmhc, .css-17eq0hr, 
+        .css-1d391kg, .css-1lcbmhc, .css-17eq0hr,
         .css-1cypcdb, .css-1adrfps, .css-6qob1r, .css-1544g2n {
-            width: 350px !important;
-            max-width: 350px !important;
+            width: 240px !important;
+            max-width: 240px !important;
         }
     }
     
+    /* Collapsed sidebar styling - makes it narrower when hidden */
+    section[data-testid="stSidebar"][aria-expanded="false"] {
+        width: 0px !important;
+        min-width: 0px !important;
+    }
+
+    section[data-testid="stSidebar"][aria-expanded="false"] > div {
+        width: 0px !important;
+        min-width: 0px !important;
+    }
+
     /* Tablet and mobile sidebar styling */
     @media (max-width: 768px) {
         section[data-testid="stSidebar"] {
-            width: 280px !important;
-            min-width: 280px !important;
-            max-width: 280px !important;
+            width: 240px !important;
+            min-width: 240px !important;
+            max-width: 240px !important;
         }
         section[data-testid="stSidebar"] > div {
-            width: 280px !important;
-            min-width: 280px !important;
-            max-width: 280px !important;
+            width: 240px !important;
+            min-width: 240px !important;
+            max-width: 240px !important;
         }
         section[data-testid="stSidebar"] .main {
-            width: 280px !important;
-            max-width: 280px !important;
+            width: 240px !important;
+            max-width: 240px !important;
         }
         section[data-testid="stSidebar"] .block-container {
-            width: 280px !important;
-            max-width: 280px !important;
-            padding-left: 0.8rem !important;
-            padding-right: 0.8rem !important;
+            width: 240px !important;
+            max-width: 240px !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
         }
-        .css-1d391kg, .css-1lcbmhc, .css-17eq0hr, 
+        .css-1d391kg, .css-1lcbmhc, .css-17eq0hr,
         .css-1cypcdb, .css-1adrfps, .css-6qob1r, .css-1544g2n {
-            width: 280px !important;
-            max-width: 280px !important;
+            width: 240px !important;
+            max-width: 240px !important;
         }
     }
     
     /* Small mobile devices */
     @media (max-width: 480px) {
         section[data-testid="stSidebar"] {
-            width: 250px !important;
-            min-width: 250px !important;
-            max-width: 250px !important;
+            width: 220px !important;
+            min-width: 220px !important;
+            max-width: 220px !important;
         }
         section[data-testid="stSidebar"] > div {
-            width: 250px !important;
-            min-width: 250px !important;
-            max-width: 250px !important;
+            width: 220px !important;
+            min-width: 220px !important;
+            max-width: 220px !important;
         }
         section[data-testid="stSidebar"] .main {
-            width: 250px !important;
-            max-width: 250px !important;
+            width: 220px !important;
+            max-width: 220px !important;
         }
         section[data-testid="stSidebar"] .block-container {
-            width: 250px !important;
-            max-width: 250px !important;
+            width: 220px !important;
+            max-width: 220px !important;
             padding-left: 0.5rem !important;
             padding-right: 0.5rem !important;
         }
@@ -124,19 +135,15 @@ st.markdown(
     
     /* Improve sidebar toggle button */
     button[kind="header"] {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 8px !important;
+        background: #000000 !important;
+        border: 1px solid #333333 !important;
+        border-radius: 6px !important;
         padding: 0.5rem !important;
-        transition: all 0.3s ease !important;
-        position: relative !important;
-        overflow: hidden !important;
+        transition: border-color 0.2s ease !important;
     }
-    
+
     button[kind="header"]:hover {
-        background: rgba(255, 255, 255, 0.2) !important;
-        transform: scale(1.05) !important;
-        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1) !important;
+        border-color: #666666 !important;
     }
     
     button[kind="header"]:active {
@@ -212,117 +219,65 @@ st.markdown(
         }
         
         .stApp {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: white;
+            background: #000000;
+            color: #FFFFFF;
         }
         
         .main-header {
             text-align: center;
             padding: 2rem 0;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: #000000;
+            border-radius: 0px;
             margin: 1rem 0 2rem 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 1s ease-out;
+            border-bottom: 1px solid #333333;
         }
-        
+
         .main-header h1 {
-            font-size: 3.5rem !important;
-            font-weight: 700 !important;
+            font-size: 2.5rem !important;
+            font-weight: 600 !important;
             margin: 0 !important;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 4s ease-in-out infinite;
+            color: #FFFFFF !important;
+            letter-spacing: -0.5px;
         }
         
         .main-header p {
-            font-size: 1.2rem;
-            margin-top: 1rem;
-            opacity: 0.9;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 60%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            80% {
-                transform: translateY(-5px);
-            }
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            opacity: 0.6;
+            font-weight: 400;
         }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem;
+            background: #000000;
+            border-radius: 8px;
+            border: 1px solid #333333;
+            padding: 1.5rem;
             margin: 1rem 0;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            animation: slideIn 0.6s ease-out;
+            transition: border-color 0.2s ease;
         }
-        
+
         .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.4);
+            border-color: #666666;
         }
         
         .metric-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+            background: #000000;
+            border-radius: 8px;
             padding: 1.5rem;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.8s ease-out;
+            border: 1px solid #333333;
+            transition: border-color 0.2s ease;
         }
-        
+
         .metric-card:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            border-color: #666666;
         }
-        
+
         .metric-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #4ecdc4;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #FFFFFF;
             margin: 0;
-            animation: bounce 2s infinite;
         }
         
         .metric-label {
@@ -332,63 +287,56 @@ st.markdown(
         }
         
         .stButton > button {
-            background: linear-gradient(135deg, #1a1a2e, #16213e) !important;
-            color: white !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 25px !important;
-            padding: 0.75rem 2rem !important;
-            font-weight: 600 !important;
-            font-size: 1.1rem !important;
-            transition: all 0.3s ease !important;
-            box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.4) !important;
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            border: 1px solid #FFFFFF !important;
+            border-radius: 6px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            transition: opacity 0.2s ease !important;
         }
-        
+
         .stButton > button:hover {
-            transform: translateY(-3px) !important;
-            box-shadow: 0 7px 25px 0 rgba(0, 0, 0, 0.6) !important;
-            background: linear-gradient(135deg, #16213e, #0f3460) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            opacity: 0.8 !important;
         }
         
         .result-positive {
-            background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(220, 53, 69, 0.1)) !important;
-            color: #ff6b6b !important;
-            border-left: 5px solid #ff6b6b !important;
+            background: #000000 !important;
+            color: #FFFFFF !important;
+            border-left: 5px solid #FFFFFF !important;
         }
-        
+
         .result-negative {
-            background: linear-gradient(135deg, rgba(25, 135, 84, 0.2), rgba(25, 135, 84, 0.1)) !important;
-            color: #4ecdc4 !important;
-            border-left: 5px solid #4ecdc4 !important;
+            background: #000000 !important;
+            color: #FFFFFF !important;
+            border-left: 5px solid #FFFFFF !important;
         }
         
         .result-box {
-            border-radius: 20px !important;
+            border-radius: 8px !important;
             padding: 2rem !important;
             margin: 2rem 0 !important;
             text-align: center !important;
-            backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            animation: fadeInUp 0.8s ease-out !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+            border: 1px solid #333333 !important;
         }
         
         .stSelectbox > div > div {
-            background: rgba(255, 255, 255, 0.05) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 10px !important;
+            background: #000000 !important;
+            border: 1px solid #333333 !important;
+            border-radius: 6px !important;
         }
-        
+
         .stSelectbox > div > div > div {
-            background: rgba(26, 26, 46, 0.9) !important;
-            color: white !important;
+            background: #000000 !important;
+            color: #FFFFFF !important;
         }
-        
+
         .stNumberInput > div > div > input {
-            background: rgba(255, 255, 255, 0.05) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 10px !important;
-            color: white !important;
+            background: #000000 !important;
+            border: 1px solid #333333 !important;
+            border-radius: 6px !important;
+            color: #FFFFFF !important;
         }
         
         .stats-grid {
@@ -399,57 +347,40 @@ st.markdown(
         }
         
         .health-tip {
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.1));
-            border-left: 4px solid #4caf50;
-            padding: 1rem;
+            background: #000000;
+            border-left: 2px solid #666666;
+            padding: 0.8rem;
             margin: 0.5rem 0;
-            border-radius: 10px;
-            animation: slideIn 1s ease-out;
-            font-size: 0.9rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            border: 1px solid #333333;
         }
-        
+
         .info-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            background: #000000;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #333333;
         }
         
         .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid #333333;
             border-radius: 50%;
-            border-top: 4px solid #4ecdc4;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
+            border-top: 2px solid #FFFFFF;
+            width: 40px;
+            height: 40px;
             margin: 0 auto;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         .sidebar .sidebar-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-            backdrop-filter: blur(10px);
+            background: #000000;
         }
-        
+
         section[data-testid="stSidebar"] {
-            background: linear-gradient(135deg, #0d1421 0%, #1a1a2e 100%) !important;
-            transition: all 0.3s ease !important;
+            background: #000000 !important;
+            transition: border-color 0.2s ease !important;
+            border-right: 1px solid #333333 !important;
         }
         
         /* Force consistent width for all sidebar elements */
@@ -626,8 +557,8 @@ st.markdown(
 st.markdown(
     """
     <div class="main-header">
-        <h1>🫀 Heart Sense</h1>
-        <p>Advanced ML-powered cardiovascular risk assessment platform</p>
+        <h1>Heart Disease Prediction</h1>
+        <p>AI-powered cardiovascular risk assessment</p>
     </div>
     """,
     unsafe_allow_html=True,
@@ -635,85 +566,71 @@ st.markdown(
 
 # Sidebar with enhanced content
 with st.sidebar:
-    st.markdown("### 🎛️ Control Panel")
-    
+    st.markdown("### Control Panel")
+
     # Model selection with enhanced styling
     model_choice = st.selectbox(
-        "🤖 Choose AI Model", 
+        "Choose Model",
         list(MODELS.keys()),
         help="Different algorithms offer varying accuracy and interpretability"
     )
-    
+
     st.markdown("---")
-    
+
     # Statistics section
-    st.markdown("### 📊 Quick Stats")
-    
+    st.markdown("### Statistics")
+
     st.markdown(
         """
         <div class="metric-card" style="margin-bottom: 1rem;">
             <div class="metric-number">655K</div>
-            <div class="metric-label">Annual Deaths (US)</div>
+            <div class="metric-label">Annual Deaths</div>
         </div>
-        """, 
+        """,
         unsafe_allow_html=True
     )
-    
+
     st.markdown(
         """
         <div class="metric-card" style="margin-bottom: 1rem;">
-            <div class="metric-number" style="font-size: 2.2rem;">1 in 4</div>
-            <div class="metric-label">Death Rate</div>
+            <div class="metric-number">28%</div>
+            <div class="metric-label">CVD Death Rate</div>
         </div>
-        """, 
+        """,
         unsafe_allow_html=True
     )
-    
-    # Health tips
-    st.markdown("### 💡 Heart Health Tips")
-    
-    tips = [
-        "🥗 Eat a balanced diet rich in fruits and vegetables",
-        "🏃‍♂️ Exercise regularly - aim for 150 minutes/week",
-        "🚭 Avoid smoking and limit alcohol consumption", 
-        "😴 Get 7-9 hours of quality sleep nightly",
-        "🧘‍♀️ Manage stress through meditation or yoga"
-    ]
-    
-    for tip in tips:
-        st.markdown(f'<div class="health-tip">{tip}</div>', unsafe_allow_html=True)
 
 # Main content area with tabs
-tab1, tab2, tab3, tab4 = st.tabs(["🔍 Prediction", "📈 Analytics", "ℹ️ Information", "🔬 Model Details"])
+tab1, tab2, tab3, tab4 = st.tabs(["Prediction", "Analytics", "Information", "Model Details"])
 
 with tab1:
     # Patient Information Form
-    
-    st.markdown("### 👤 Patient Information")
-    
+
+    st.markdown("### Patient Information")
+
     with st.form("patient_form"):
         col1, col2 = st.columns(2)
-        
+
         with col1:
-            age = st.number_input("🎂 Age", min_value=1, max_value=120, value=50, step=1)
-            sex = st.selectbox("👤 Sex", ["Male", "Female"])
-            cp = st.selectbox("💔 Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"])
-            resting_bp = st.number_input("🩺 Resting Blood Pressure (mmHg)", min_value=50, max_value=200, value=120)
-            cholesterol = st.number_input("🧪 Cholesterol (mg/dL)", min_value=100, max_value=600, value=200)
-            fasting_bs = st.selectbox("🍬 Fasting Blood Sugar > 120 mg/dl", [0, 1])
-        
+            age = st.number_input("Age (years)", min_value=18, max_value=100, value=50, step=1, help="Valid range: 18-100 years")
+            sex = st.selectbox("Sex", ["Male", "Female"])
+            cp = st.selectbox("Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"])
+            resting_bp = st.number_input("Resting Blood Pressure (mmHg)", min_value=80, max_value=200, value=120, step=1, help="Valid range: 80-200 mmHg")
+            cholesterol = st.number_input("Cholesterol (mg/dL)", min_value=100, max_value=400, value=200, step=1, help="Valid range: 100-400 mg/dL")
+            fasting_bs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", [0, 1])
+
         with col2:
-            restecg = st.selectbox("📋 Resting ECG", ["Normal", "ST-T Abnormality", "LVH"])
-            max_hr = st.number_input("💓 Max Heart Rate", min_value=50, max_value=220, value=150)
-            exercise_angina = st.selectbox("🏃‍♂️ Exercise Induced Angina", ["No", "Yes"])
-            oldpeak = st.number_input("📉 Oldpeak (ST Depression)", min_value=0.0, max_value=10.0, value=1.0, step=0.1)
-            st_slope = st.selectbox("📈 ST Slope", ["Up", "Flat", "Down"])
+            restecg = st.selectbox("Resting ECG", ["Normal", "ST-T Abnormality", "LVH"])
+            max_hr = st.number_input("Max Heart Rate (bpm)", min_value=60, max_value=220, value=150, step=1, help="Valid range: 60-220 bpm")
+            exercise_angina = st.selectbox("Exercise Induced Angina", ["No", "Yes"])
+            oldpeak = st.number_input("Oldpeak (ST Depression)", min_value=0.0, max_value=6.2, value=1.0, step=0.1, help="Valid range: 0.0-6.2")
+            st_slope = st.selectbox("ST Slope", ["Up", "Flat", "Down"])
             st.markdown("")  # Spacing
-        
-        # Predict button with loading animation
+
+        # Predict button
         col_center = st.columns([1, 2, 1])
         with col_center[1]:
-            submitted = st.form_submit_button("🚀 Analyze Heart Risk", use_container_width=True)
+            submitted = st.form_submit_button("Analyze", use_container_width=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -726,14 +643,6 @@ with tab1:
 
     # Prediction Results
     if submitted:
-        # Show loading animation
-        loading_placeholder = st.empty()
-        with loading_placeholder:
-            st.markdown('<div class="loading-spinner"></div>', unsafe_allow_html=True)
-            st.markdown('<p style="text-align: center; margin-top: 1rem;">🤖 AI is analyzing your data...</p>', unsafe_allow_html=True)
-            time.sleep(2)  # Simulate processing time
-        
-        loading_placeholder.empty()
         
         features = np.array([[
             age,
@@ -767,21 +676,21 @@ with tab1:
                 st.markdown(
                     f"""
                     <div class="result-box result-positive">
-                        <h2>⚠️ High Risk Detected</h2>
-                        <p style="font-size:20px; margin:15px 0;">
-                            The {model_choice} model indicates this patient has a <b>HIGH RISK</b> of heart disease.
+                        <h2>High Risk Detected</h2>
+                        <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
+                            The {model_choice} model indicates this patient has a high risk of heart disease.
                         </p>
                         <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
                             <div>
-                                <div style="font-size: 2rem; font-weight: bold; color: #ff6b6b;">
+                                <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
                                     {risk_score:.1f}%
                                 </div>
-                                <div>Risk Score</div>
+                                <div style="opacity: 0.7; font-size: 0.875rem;">Risk Score</div>
                             </div>
-                            {"<div><div style='font-size: 2rem; font-weight: bold; color: #ff6b6b;'>" + f"{confidence:.1f}%" + "</div><div>Confidence</div></div>" if confidence else ""}
+                            {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
                         </div>
-                        <p style="margin-top: 1rem; font-size: 14px; opacity: 0.8;">
-                            ⚠️ Please consult with a healthcare professional immediately for proper evaluation.
+                        <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
+                            Please consult with a healthcare professional for proper evaluation.
                         </p>
                     </div>
                     """,
@@ -789,47 +698,47 @@ with tab1:
                 )
                 
                 # Risk factors analysis
-                st.markdown("### 🔍 Risk Factor Analysis")
+                st.markdown("### Risk Factor Analysis")
                 risk_factors = []
                 if age > 65: risk_factors.append("Advanced age")
                 if cholesterol > 240: risk_factors.append("High cholesterol")
                 if resting_bp > 140: risk_factors.append("High blood pressure")
                 if exercise_angina == "Yes": risk_factors.append("Exercise-induced angina")
                 if cp in ["Typical Angina", "Atypical Angina"]: risk_factors.append("Chest pain symptoms")
-                
+
                 if risk_factors:
                     for factor in risk_factors:
-                        st.error(f"🚨 {factor}")
+                        st.error(f"{factor}")
                 else:
-                    st.info("ℹ️ No major risk factors identified in the input data")
+                    st.info("No major risk factors identified in the input data")
                     
             else:
                 st.markdown(
                     f"""
                     <div class="result-box result-negative">
-                        <h2>✅ Low Risk Assessment</h2>
-                        <p style="font-size:20px; margin:15px 0;">
-                            The {model_choice} model indicates this patient has a <b>LOW RISK</b> of heart disease.
+                        <h2>Low Risk Assessment</h2>
+                        <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
+                            The {model_choice} model indicates this patient has a low risk of heart disease.
                         </p>
                         <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
                             <div>
-                                <div style="font-size: 2rem; font-weight: bold; color: #4ecdc4;">
+                                <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
                                     {100-risk_score:.1f}%
                                 </div>
-                                <div>Healthy Score</div>
+                                <div style="opacity: 0.7; font-size: 0.875rem;">Healthy Score</div>
                             </div>
-                            {"<div><div style='font-size: 2rem; font-weight: bold; color: #4ecdc4;'>" + f"{confidence:.1f}%" + "</div><div>Confidence</div></div>" if confidence else ""}
+                            {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
                         </div>
-                        <p style="margin-top: 1rem; font-size: 14px; opacity: 0.8;">
-                            ✅ Continue maintaining a healthy lifestyle and regular check-ups.
+                        <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
+                            Continue maintaining a healthy lifestyle and regular check-ups.
                         </p>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
 
-            # Patient Summary Table with enhanced styling
-            st.markdown("### 📋 Patient Summary")
+            # Patient Summary Table
+            st.markdown("### Patient Summary")
             
             # Create a DataFrame for better presentation
             summary_data = {
@@ -856,7 +765,7 @@ with tab1:
             st.error(f"Model {model_choice} not found!")
 
 with tab2:
-    st.markdown("### 📊 Heart Disease Analytics Dashboard")
+    st.markdown("### Analytics Dashboard")
     
     # Create sample visualizations
     col1, col2 = st.columns(2)
@@ -897,7 +806,7 @@ with tab2:
         st.plotly_chart(fig2, use_container_width=True)
     
     # Model comparison chart
-    st.markdown("### 🤖 Model Performance Comparison")
+    st.markdown("### Model Performance Comparison")
     
     models = ['Random Forest', 'Decision Tree', 'SVM', 'Logistic Regression']
     accuracy = [0.89, 0.85, 0.87, 0.84]
@@ -917,61 +826,61 @@ with tab2:
     st.plotly_chart(fig3, use_container_width=True)
 
 with tab3:
-    st.markdown("### ℹ️ Heart Disease Information")
-    
+    st.markdown("### Information")
+
     # Information sections
     info_col1, info_col2 = st.columns(2)
-    
+
     with info_col1:
         st.markdown('<div class="info-section">', unsafe_allow_html=True)
-        st.markdown("#### 🫀 What is Heart Disease?")
-        st.markdown("Heart disease refers to several types of heart conditions, including coronary artery disease, heart rhythm problems, and heart defects. It's the leading cause of death globally.")
-        
-        st.markdown("#### ⚠️ Common Symptoms")
+        st.markdown("#### What is Heart Disease?")
+        st.markdown("Heart disease refers to several types of heart conditions, including coronary artery disease, heart rhythm problems, and heart defects. It remains one of the leading causes of death globally.")
+
+        st.markdown("#### Common Symptoms")
         st.markdown("- Chest pain or discomfort")
         st.markdown("- Shortness of breath")
         st.markdown("- Pain in neck, jaw, or back")
         st.markdown("- Fatigue and weakness")
         st.markdown("- Irregular heartbeat")
         st.markdown('</div>', unsafe_allow_html=True)
-    
+
     with info_col2:
         st.markdown('<div class="info-section">', unsafe_allow_html=True)
-        st.markdown("#### 🛡️ Prevention Tips")
+        st.markdown("#### Prevention Tips")
         st.markdown("- **Healthy Diet:** Low in saturated fat, rich in fruits and vegetables")
         st.markdown("- **Regular Exercise:** At least 150 minutes of moderate activity weekly")
         st.markdown("- **No Smoking:** Avoid tobacco and limit alcohol")
         st.markdown("- **Weight Management:** Maintain healthy BMI")
         st.markdown("- **Stress Management:** Practice relaxation techniques")
         st.markdown("- **Regular Check-ups:** Monitor blood pressure and cholesterol")
-        
-        st.markdown("#### 🩺 When to See a Doctor")
+
+        st.markdown("#### When to See a Doctor")
         st.markdown("Consult immediately if experiencing chest pain, severe shortness of breath, fainting, or rapid/irregular heartbeat.")
         st.markdown('</div>', unsafe_allow_html=True)
 
 with tab4:
-    st.markdown("### 🔬 Model Technical Details")
-    
+    st.markdown("### Model Technical Details")
+
     model_info = {
-        "🌲 Random Forest": {
+        "Random Forest": {
             "Description": "Ensemble method using multiple decision trees",
             "Accuracy": "~89%",
             "Strengths": "High accuracy, handles missing values well",
             "Use Case": "Best overall performance"
         },
-        "🌳 Decision Tree": {
+        "Decision Tree": {
             "Description": "Tree-like model of decisions and outcomes",
-            "Accuracy": "~85%", 
+            "Accuracy": "~85%",
             "Strengths": "Highly interpretable, easy to understand",
             "Use Case": "When interpretability is crucial"
         },
-        "🎯 SVM": {
+        "SVM": {
             "Description": "Support Vector Machine for classification",
             "Accuracy": "~87%",
             "Strengths": "Works well with high-dimensional data",
             "Use Case": "Complex feature relationships"
         },
-        "📊 Logistic Regression": {
+        "Logistic Regression": {
             "Description": "Statistical model for binary classification",
             "Accuracy": "~84%",
             "Strengths": "Fast, provides probability estimates",
@@ -997,14 +906,9 @@ with tab4:
 st.markdown("---")
 st.markdown(
     f"""
-    <div class="glass-card" style="text-align: center;">
-        <h4>Heart Sense</h4>
-        <p><b>Development Team:</b> Arindam Singh (E23CSEU1171) • Adarsh (E23CSEU1189) • Yashvardhan Dhaka (E23CSEU1192)</p>
-        <p style="font-size: 0.9rem; opacity: 0.7;">
-            Last Updated: {datetime.now().strftime("%B %d, %Y")}
-        </p>
-        <p style="font-size: 0.8rem; opacity: 0.6;">
-            ⚠️ Disclaimer: This tool is for educational purposes only. Always consult healthcare professionals for medical advice.
+    <div class="glass-card" style="text-align: center; padding: 1.5rem;">
+        <p style="font-size: 0.875rem; opacity: 0.7; margin: 0 0 0.5rem 0;">
+            Created by Adarsh (E23CSEU1189), Arindam Singh (E23CSEU1171), Yashvardhan Dhaka (E23CSEU1192)
         </p>
     </div>
     """,

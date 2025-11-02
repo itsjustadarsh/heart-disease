@@ -4,7 +4,9 @@
       "Bash(streamlit run:*)",
       "Bash(pip install:*)",
       "Bash(python -m streamlit run:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(dir:*)",
+      "Bash(timeout 5 bash:*)"
     ],
     "deny": [],
     "ask": []
