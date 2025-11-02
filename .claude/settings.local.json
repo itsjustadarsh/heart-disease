@@ -6,7 +6,8 @@
       "Bash(python -m streamlit run:*)",
       "Bash(taskkill:*)",
       "Bash(dir:*)",
-      "Bash(timeout 5 bash:*)"
+      "Bash(timeout 5 bash:*)",
+      "Bash(python -c:*)"
     ],
     "deny": [],
     "ask": []

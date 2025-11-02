@@ -1,11 +1,15 @@
 import streamlit as st
 import pickle
 import numpy as np
-import plotly.graph_objects as go
-import plotly.express as px
-from datetime import datetime
-import time
 import pandas as pd
+
+# Page config with custom favicon - MUST BE FIRST
+st.set_page_config(
+    page_title="Heart Disease Prediction",
+    page_icon="⚕️",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
 # Load models
 MODELS = {
@@ -18,23 +22,32 @@ MODELS = {
 @st.cache_resource
 def load_models():
     loaded_models = {}
-    for name, path in MODELS.items():
+    # Original model names with emojis for file loading
+    original_models = {
+        "🌲 Random Forest": "RandomForest.pkl",
+        "🌳 Decision Tree": "DecisionTree.pkl",
+        "🎯 SVM": "SVM_Model.pkl",
+        "📊 Logistic Regression": "LogisticR.pkl",
+    }
+
+    # Load models and map to clean names (without emojis)
+    name_mapping = {
+        "🌲 Random Forest": "Random Forest",
+        "🌳 Decision Tree": "Decision Tree",
+        "🎯 SVM": "SVM",
+        "📊 Logistic Regression": "Logistic Regression",
+    }
+
+    for emoji_name, path in original_models.items():
         try:
             with open(path, "rb") as f:
-                loaded_models[name] = pickle.load(f)
+                clean_name = name_mapping[emoji_name]
+                loaded_models[clean_name] = pickle.load(f)
         except FileNotFoundError:
             st.error(f"Model file {path} not found!")
     return loaded_models
 
 loaded_models = load_models()
-
-# Page config with custom favicon
-st.set_page_config(
-    page_title="Heart Disease Prediction",
-    page_icon="⚕️",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Responsive sidebar CSS with mobile support
 st.markdown(
@@ -600,307 +613,161 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-# Main content area with tabs
-tab1, tab2, tab3, tab4 = st.tabs(["Prediction", "Analytics", "Information", "Model Details"])
+# Main content area
+st.markdown("### Patient Information")
 
-with tab1:
-    # Patient Information Form
-
-    st.markdown("### Patient Information")
-
-    with st.form("patient_form"):
-        col1, col2 = st.columns(2)
-
-        with col1:
-            age = st.number_input("Age (years)", min_value=18, max_value=100, value=50, step=1, help="Valid range: 18-100 years")
-            sex = st.selectbox("Sex", ["Male", "Female"])
-            cp = st.selectbox("Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"])
-            resting_bp = st.number_input("Resting Blood Pressure (mmHg)", min_value=80, max_value=200, value=120, step=1, help="Valid range: 80-200 mmHg")
-            cholesterol = st.number_input("Cholesterol (mg/dL)", min_value=100, max_value=400, value=200, step=1, help="Valid range: 100-400 mg/dL")
-            fasting_bs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", [0, 1])
-
-        with col2:
-            restecg = st.selectbox("Resting ECG", ["Normal", "ST-T Abnormality", "LVH"])
-            max_hr = st.number_input("Max Heart Rate (bpm)", min_value=60, max_value=220, value=150, step=1, help="Valid range: 60-220 bpm")
-            exercise_angina = st.selectbox("Exercise Induced Angina", ["No", "Yes"])
-            oldpeak = st.number_input("Oldpeak (ST Depression)", min_value=0.0, max_value=6.2, value=1.0, step=0.1, help="Valid range: 0.0-6.2")
-            st_slope = st.selectbox("ST Slope", ["Up", "Flat", "Down"])
-            st.markdown("")  # Spacing
-
-        # Predict button
-        col_center = st.columns([1, 2, 1])
-        with col_center[1]:
-            submitted = st.form_submit_button("Analyze", use_container_width=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Feature mapping
-    sex_map = {"Male": 1, "Female": 0}
-    cp_map = {"Typical Angina": 0, "Atypical Angina": 1, "Non-anginal": 2, "Asymptomatic": 3}
-    restecg_map = {"Normal": 0, "ST-T Abnormality": 1, "LVH": 2}
-    angina_map = {"No": 0, "Yes": 1}
-    slope_map = {"Up": 0, "Flat": 1, "Down": 2}
-
-    # Prediction Results
-    if submitted:
-        
-        features = np.array([[
-            age,
-            sex_map[sex],
-            cp_map[cp],
-            resting_bp,
-            cholesterol,
-            fasting_bs,
-            restecg_map[restecg],
-            max_hr,
-            angina_map[exercise_angina],
-            oldpeak,
-            slope_map[st_slope]
-        ]])
-
-        if model_choice in loaded_models:
-            model = loaded_models[model_choice]
-            prediction = model.predict(features)[0]
-
-            # Check if model supports predict_proba
-            if hasattr(model, "predict_proba"):
-                proba = model.predict_proba(features)[0]
-                confidence = np.max(proba) * 100
-                risk_score = proba[1] * 100  # Probability of having heart disease
-            else:
-                confidence = None
-                risk_score = prediction * 100
-
-            # Enhanced Result Display
-            if prediction == 1:
-                st.markdown(
-                    f"""
-                    <div class="result-box result-positive">
-                        <h2>High Risk Detected</h2>
-                        <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
-                            The {model_choice} model indicates this patient has a high risk of heart disease.
-                        </p>
-                        <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
-                            <div>
-                                <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
-                                    {risk_score:.1f}%
-                                </div>
-                                <div style="opacity: 0.7; font-size: 0.875rem;">Risk Score</div>
-                            </div>
-                            {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
-                        </div>
-                        <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
-                            Please consult with a healthcare professional for proper evaluation.
-                        </p>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                
-                # Risk factors analysis
-                st.markdown("### Risk Factor Analysis")
-                risk_factors = []
-                if age > 65: risk_factors.append("Advanced age")
-                if cholesterol > 240: risk_factors.append("High cholesterol")
-                if resting_bp > 140: risk_factors.append("High blood pressure")
-                if exercise_angina == "Yes": risk_factors.append("Exercise-induced angina")
-                if cp in ["Typical Angina", "Atypical Angina"]: risk_factors.append("Chest pain symptoms")
-
-                if risk_factors:
-                    for factor in risk_factors:
-                        st.error(f"{factor}")
-                else:
-                    st.info("No major risk factors identified in the input data")
-                    
-            else:
-                st.markdown(
-                    f"""
-                    <div class="result-box result-negative">
-                        <h2>Low Risk Assessment</h2>
-                        <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
-                            The {model_choice} model indicates this patient has a low risk of heart disease.
-                        </p>
-                        <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
-                            <div>
-                                <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
-                                    {100-risk_score:.1f}%
-                                </div>
-                                <div style="opacity: 0.7; font-size: 0.875rem;">Healthy Score</div>
-                            </div>
-                            {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
-                        </div>
-                        <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
-                            Continue maintaining a healthy lifestyle and regular check-ups.
-                        </p>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-
-            # Patient Summary Table
-            st.markdown("### Patient Summary")
-            
-            # Create a DataFrame for better presentation
-            summary_data = {
-                "Parameter": ["Age", "Sex", "Chest Pain", "Resting BP", "Cholesterol", "Fasting BS", 
-                            "Rest ECG", "Max HR", "Exercise Angina", "Oldpeak", "ST Slope"],
-                "Value": [age, sex, cp, f"{resting_bp} mmHg", f"{cholesterol} mg/dL", 
-                         "Yes" if fasting_bs == 1 else "No", restecg, f"{max_hr} bpm", 
-                         exercise_angina, oldpeak, st_slope],
-                "Status": ["Normal" if age < 65 else "Risk Factor",
-                          "Normal", "Normal" if cp == "Asymptomatic" else "Risk Factor",
-                          "Normal" if resting_bp < 140 else "Risk Factor",
-                          "Normal" if cholesterol < 240 else "Risk Factor",
-                          "Normal" if fasting_bs == 0 else "Risk Factor",
-                          "Normal" if restecg == "Normal" else "Risk Factor",
-                          "Normal" if max_hr > 100 else "Risk Factor",
-                          "Normal" if exercise_angina == "No" else "Risk Factor",
-                          "Normal" if oldpeak < 2.0 else "Risk Factor",
-                          "Normal"]
-            }
-            
-            df_summary = pd.DataFrame(summary_data)
-            st.dataframe(df_summary, use_container_width=True)
-        else:
-            st.error(f"Model {model_choice} not found!")
-
-with tab2:
-    st.markdown("### Analytics Dashboard")
-    
-    # Create sample visualizations
+with st.form("patient_form"):
     col1, col2 = st.columns(2)
-    
+
     with col1:
-        # Age distribution chart
-        age_data = np.random.normal(55, 12, 1000)
-        age_data = age_data[(age_data > 20) & (age_data < 90)]
-        
-        fig1 = px.histogram(
-            x=age_data, 
-            nbins=20,
-            title="Age Distribution in Heart Disease Cases",
-            color_discrete_sequence=['#667eea']
-        )
-        fig1.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='white')
-        )
-        st.plotly_chart(fig1, use_container_width=True)
-    
+        age = st.number_input("Age (years)", min_value=18, max_value=100, value=50, step=1, help="Valid range: 18-100 years")
+        sex = st.selectbox("Sex", ["Male", "Female"])
+        cp = st.selectbox("Chest Pain Type", ["Typical Angina", "Atypical Angina", "Non-anginal", "Asymptomatic"])
+        resting_bp = st.number_input("Resting Blood Pressure (mmHg)", min_value=80, max_value=200, value=120, step=1, help="Valid range: 80-200 mmHg")
+        cholesterol = st.number_input("Cholesterol (mg/dL)", min_value=100, max_value=400, value=200, step=1, help="Valid range: 100-400 mg/dL")
+        fasting_bs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", [0, 1])
+
     with col2:
-        # Risk factors pie chart
-        risk_factors = ['High Cholesterol', 'High BP', 'Smoking', 'Diabetes', 'Age', 'Other']
-        values = [25, 20, 18, 15, 12, 10]
-        
-        fig2 = px.pie(
-            values=values, 
-            names=risk_factors, 
-            title="Common Risk Factors Distribution"
-        )
-        fig2.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='white')
-        )
-        st.plotly_chart(fig2, use_container_width=True)
-    
-    # Model comparison chart
-    st.markdown("### Model Performance Comparison")
-    
-    models = ['Random Forest', 'Decision Tree', 'SVM', 'Logistic Regression']
-    accuracy = [0.89, 0.85, 0.87, 0.84]
-    
-    fig3 = px.bar(
-        x=models,
-        y=accuracy,
-        title="Model Accuracy Comparison",
-        color=accuracy,
-        color_continuous_scale='Viridis'
-    )
-    fig3.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='white')
-    )
-    st.plotly_chart(fig3, use_container_width=True)
+        restecg = st.selectbox("Resting ECG", ["Normal", "ST-T Abnormality", "LVH"])
+        max_hr = st.number_input("Max Heart Rate (bpm)", min_value=60, max_value=220, value=150, step=1, help="Valid range: 60-220 bpm")
+        exercise_angina = st.selectbox("Exercise Induced Angina", ["No", "Yes"])
+        oldpeak = st.number_input("Oldpeak (ST Depression)", min_value=0.0, max_value=6.2, value=1.0, step=0.1, help="Valid range: 0.0-6.2")
+        st_slope = st.selectbox("ST Slope", ["Up", "Flat", "Down"])
+        st.markdown("")  # Spacing
 
-with tab3:
-    st.markdown("### Information")
+    # Predict button
+    col_center = st.columns([1, 2, 1])
+    with col_center[1]:
+        submitted = st.form_submit_button("Analyze", use_container_width=True)
 
-    # Information sections
-    info_col1, info_col2 = st.columns(2)
+# Feature mapping
+sex_map = {"Male": 1, "Female": 0}
+cp_map = {"Typical Angina": 0, "Atypical Angina": 1, "Non-anginal": 2, "Asymptomatic": 3}
+restecg_map = {"Normal": 0, "ST-T Abnormality": 1, "LVH": 2}
+angina_map = {"No": 0, "Yes": 1}
+slope_map = {"Up": 0, "Flat": 1, "Down": 2}
 
-    with info_col1:
-        st.markdown('<div class="info-section">', unsafe_allow_html=True)
-        st.markdown("#### What is Heart Disease?")
-        st.markdown("Heart disease refers to several types of heart conditions, including coronary artery disease, heart rhythm problems, and heart defects. It remains one of the leading causes of death globally.")
+# Prediction Results
+if submitted:
+    features = np.array([[
+        age,
+        sex_map[sex],
+        cp_map[cp],
+        resting_bp,
+        cholesterol,
+        fasting_bs,
+        restecg_map[restecg],
+        max_hr,
+        angina_map[exercise_angina],
+        oldpeak,
+        slope_map[st_slope]
+    ]])
 
-        st.markdown("#### Common Symptoms")
-        st.markdown("- Chest pain or discomfort")
-        st.markdown("- Shortness of breath")
-        st.markdown("- Pain in neck, jaw, or back")
-        st.markdown("- Fatigue and weakness")
-        st.markdown("- Irregular heartbeat")
-        st.markdown('</div>', unsafe_allow_html=True)
+    if model_choice in loaded_models:
+        model = loaded_models[model_choice]
+        prediction = model.predict(features)[0]
 
-    with info_col2:
-        st.markdown('<div class="info-section">', unsafe_allow_html=True)
-        st.markdown("#### Prevention Tips")
-        st.markdown("- **Healthy Diet:** Low in saturated fat, rich in fruits and vegetables")
-        st.markdown("- **Regular Exercise:** At least 150 minutes of moderate activity weekly")
-        st.markdown("- **No Smoking:** Avoid tobacco and limit alcohol")
-        st.markdown("- **Weight Management:** Maintain healthy BMI")
-        st.markdown("- **Stress Management:** Practice relaxation techniques")
-        st.markdown("- **Regular Check-ups:** Monitor blood pressure and cholesterol")
+        # Check if model supports predict_proba
+        if hasattr(model, "predict_proba"):
+            proba = model.predict_proba(features)[0]
+            confidence = np.max(proba) * 100
+            risk_score = proba[1] * 100  # Probability of having heart disease
+        else:
+            confidence = None
+            risk_score = prediction * 100
 
-        st.markdown("#### When to See a Doctor")
-        st.markdown("Consult immediately if experiencing chest pain, severe shortness of breath, fainting, or rapid/irregular heartbeat.")
-        st.markdown('</div>', unsafe_allow_html=True)
-
-with tab4:
-    st.markdown("### Model Technical Details")
-
-    model_info = {
-        "Random Forest": {
-            "Description": "Ensemble method using multiple decision trees",
-            "Accuracy": "~89%",
-            "Strengths": "High accuracy, handles missing values well",
-            "Use Case": "Best overall performance"
-        },
-        "Decision Tree": {
-            "Description": "Tree-like model of decisions and outcomes",
-            "Accuracy": "~85%",
-            "Strengths": "Highly interpretable, easy to understand",
-            "Use Case": "When interpretability is crucial"
-        },
-        "SVM": {
-            "Description": "Support Vector Machine for classification",
-            "Accuracy": "~87%",
-            "Strengths": "Works well with high-dimensional data",
-            "Use Case": "Complex feature relationships"
-        },
-        "Logistic Regression": {
-            "Description": "Statistical model for binary classification",
-            "Accuracy": "~84%",
-            "Strengths": "Fast, provides probability estimates",
-            "Use Case": "Quick predictions with probabilities"
-        }
-    }
-    
-    for model, info in model_info.items():
-        st.markdown(
-            f"""
-            <div class="glass-card">
-                <h4>{model}</h4>
-                <p><b>Description:</b> {info['Description']}</p>
-                <p><b>Accuracy:</b> {info['Accuracy']}</p>
-                <p><b>Strengths:</b> {info['Strengths']}</p>
-                <p><b>Best Use Case:</b> {info['Use Case']}</p>
-            </div>
+        # Enhanced Result Display
+        if prediction == 1:
+            st.markdown(
+                f"""
+                <div class="result-box result-positive">
+                    <h2>High Risk Detected</h2>
+                    <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
+                        The {model_choice} model indicates this patient has a high risk of heart disease.
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
+                                {risk_score:.1f}%
+                            </div>
+                            <div style="opacity: 0.7; font-size: 0.875rem;">Risk Score</div>
+                        </div>
+                        {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
+                        Please consult with a healthcare professional for proper evaluation.
+                    </p>
+                </div>
             """,
-            unsafe_allow_html=True
-        )
+                unsafe_allow_html=True,
+            )
+
+            # Risk factors analysis
+            st.markdown("### Risk Factor Analysis")
+            risk_factors = []
+            if age > 65: risk_factors.append("Advanced age")
+            if cholesterol > 240: risk_factors.append("High cholesterol")
+            if resting_bp > 140: risk_factors.append("High blood pressure")
+            if exercise_angina == "Yes": risk_factors.append("Exercise-induced angina")
+            if cp in ["Typical Angina", "Atypical Angina"]: risk_factors.append("Chest pain symptoms")
+
+            if risk_factors:
+                for factor in risk_factors:
+                    st.error(f"{factor}")
+            else:
+                st.info("No major risk factors identified in the input data")
+
+        else:
+            st.markdown(
+                f"""
+                <div class="result-box result-negative">
+                    <h2>Low Risk Assessment</h2>
+                    <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
+                        The {model_choice} model indicates this patient has a low risk of heart disease.
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
+                                {100-risk_score:.1f}%
+                            </div>
+                            <div style="opacity: 0.7; font-size: 0.875rem;">Healthy Score</div>
+                        </div>
+                        {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
+                        Continue maintaining a healthy lifestyle and regular check-ups.
+                    </p>
+                </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+        # Patient Summary Table
+        st.markdown("### Patient Summary")
+
+        # Create a DataFrame for better presentation
+        summary_data = {
+            "Parameter": ["Age", "Sex", "Chest Pain", "Resting BP", "Cholesterol", "Fasting BS",
+                        "Rest ECG", "Max HR", "Exercise Angina", "Oldpeak", "ST Slope"],
+            "Value": [age, sex, cp, f"{resting_bp} mmHg", f"{cholesterol} mg/dL",
+                     "Yes" if fasting_bs == 1 else "No", restecg, f"{max_hr} bpm",
+                     exercise_angina, oldpeak, st_slope],
+            "Status": ["Normal" if age < 65 else "Risk Factor",
+                      "Normal", "Normal" if cp == "Asymptomatic" else "Risk Factor",
+                      "Normal" if resting_bp < 140 else "Risk Factor",
+                      "Normal" if cholesterol < 240 else "Risk Factor",
+                      "Normal" if fasting_bs == 0 else "Risk Factor",
+                      "Normal" if restecg == "Normal" else "Risk Factor",
+                      "Normal" if max_hr > 100 else "Risk Factor",
+                      "Normal" if exercise_angina == "No" else "Risk Factor",
+                      "Normal" if oldpeak < 2.0 else "Risk Factor",
+                      "Normal"]
+        }
+
+        df_summary = pd.DataFrame(summary_data)
+        st.dataframe(df_summary, use_container_width=True)
+    else:
+        st.error(f"Model {model_choice} not found!")
 
 # Footer
 st.markdown("---")
