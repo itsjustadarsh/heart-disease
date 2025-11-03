@@ -579,7 +579,7 @@ st.markdown(
 
 # Sidebar with enhanced content
 with st.sidebar:
-    st.markdown("### Control Panel")
+    st.markdown("### Model Selection")
 
     # Model selection with enhanced styling
     model_choice = st.selectbox(
@@ -591,13 +591,13 @@ with st.sidebar:
     st.markdown("---")
 
     # Statistics section
-    st.markdown("### Statistics")
+    st.markdown("### CVD Statistics (India)")
 
     st.markdown(
         """
         <div class="metric-card" style="margin-bottom: 1rem;">
             <div class="metric-number">3M+</div>
-            <div class="metric-label">Annual CVD Deaths (India)</div>
+            <div class="metric-label">Annual CVD Deaths</div>
         </div>
         """,
         unsafe_allow_html=True
@@ -607,49 +607,7 @@ with st.sidebar:
         """
         <div class="metric-card" style="margin-bottom: 1rem;">
             <div class="metric-number">27%</div>
-            <div class="metric-label">CVD Death Rate</div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("---")
-
-    # Emergency contacts
-    st.markdown("### Emergency Contacts")
-    st.markdown(
-        """
-        <div class="health-tip" style="background: #1a1a1a; border-left: 3px solid #FF4444;">
-            <strong style="color: #FF6B6B;">🚨 Cardiac Emergency</strong><br>
-            <span style="font-size: 1.2rem; font-weight: 600;">102 / 108</span><br>
-            <span style="opacity: 0.8; font-size: 0.85rem;">National Ambulance Services</span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        """
-        <div class="health-tip" style="background: #1a1a1a; border-left: 3px solid #FFA500; margin-top: 0.5rem;">
-            <strong style="color: #FFB84D;">📞 All India Helpline</strong><br>
-            <span style="font-size: 1.1rem; font-weight: 600;">1800-180-1104</span><br>
-            <span style="opacity: 0.8; font-size: 0.85rem;">National Health Portal</span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("---")
-
-    # Data source
-    st.markdown("### Data Source")
-    st.markdown(
-        """
-        <div class="health-tip" style="background: #1a1a1a; border-left: 3px solid #4ECDC4;">
-            <strong style="color: #4ECDC4;">📊 Dataset</strong><br>
-            <span style="opacity: 0.9; font-size: 0.85rem;">Heart Disease Dataset</span><br>
-            <span style="opacity: 0.7; font-size: 0.8rem;">Source: UCI Machine Learning Repository & Kaggle</span><br>
-            <span style="opacity: 0.7; font-size: 0.8rem;">918 patient records from multiple medical centers</span>
+            <div class="metric-label">Total Death Rate</div>
         </div>
         """,
         unsafe_allow_html=True
@@ -1099,93 +1057,12 @@ if submitted:
             st.markdown("""
             <div class="info-section">
                 <h4>📊 About the Data</h4>
-                <p><strong>Dataset Source:</strong> UCI Machine Learning Repository & Kaggle</p>
-                <p><strong>Dataset Name:</strong> Heart Disease Dataset</p>
-                <p><strong>Sample Size:</strong> 918 patient records from multiple medical institutions</p>
+                <p><strong>Dataset:</strong> Heart Disease Dataset</p>
+                <p><strong>Sample Size:</strong> 918 patient records</p>
                 <p><strong>Features:</strong> 11 clinical parameters including age, sex, chest pain type, blood pressure, cholesterol, ECG results, and exercise test data</p>
-                <p><strong>Origin:</strong> Combined dataset from Cleveland, Hungary, Switzerland, and Long Beach V medical databases</p>
                 <p style="opacity: 0.8; font-size: 0.9rem; margin-top: 0.5rem;">This model was trained on validated medical data to identify patterns associated with cardiovascular disease risk.</p>
             </div>
             """, unsafe_allow_html=True)
-
-            # Download/Print button
-            st.markdown("#### Save Your Results")
-            results_text = f"""
-╔═══════════════════════════════════════════════════════════════════════╗
-║                    HEART SENSE RISK ASSESSMENT                        ║
-║                  AI-Powered Cardiovascular Screening                  ║
-╚═══════════════════════════════════════════════════════════════════════╝
-
-Generated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}
-Model Used: {model_choice}
-
-═══════════════════════════════════════════════════════════════════════
-
-ASSESSMENT RESULTS:
-Risk Level: {'High Risk' if prediction == 1 else 'Low Risk'}
-Risk Score: {risk_score:.1f}%
-Confidence: {confidence:.1f if confidence else 'N/A'}%
-
-═══════════════════════════════════════════════════════════════════════
-
-YOUR MEASUREMENTS:
-• Age: {age} years
-• Sex: {sex}
-• Blood Pressure: {resting_bp} mmHg
-• Cholesterol: {cholesterol} mg/dL
-• Fasting Blood Sugar: {'Elevated' if fasting_bs == 1 else 'Normal'}
-• Max Heart Rate: {max_hr} bpm
-• Chest Pain Type: {cp}
-• Exercise-Induced Angina: {exercise_angina}
-• ST Depression (Oldpeak): {oldpeak}
-• ST Slope: {st_slope}
-• Resting ECG: {restecg}
-
-═══════════════════════════════════════════════════════════════════════
-
-IDENTIFIED RISK FACTORS ({len(risk_factors)}):
-{chr(10).join([f"• {factor}" for factor, _ in risk_factors]) if risk_factors else "None identified"}
-
-═══════════════════════════════════════════════════════════════════════
-
-NEXT STEPS:
-{'• Schedule appointment with cardiologist or general physician\n• Share these results with your doctor\n• Do not start new medications, supplements, or home remedies without medical guidance\n• Emergency: Call 102/108 if experiencing chest pain or shortness of breath' if prediction == 1 else '• Continue healthy lifestyle (yoga, walking, balanced diet)\n• Schedule annual preventive health check-up\n• Monitor blood pressure and cholesterol regularly\n• Maintain healthy weight and stress management'}
-
-═══════════════════════════════════════════════════════════════════════
-
-EMERGENCY CONTACTS (India):
-• Ambulance: 102 / 108
-• National Health Portal: 1800-180-1104
-• Rush to nearest hospital for cardiac emergencies
-
-═══════════════════════════════════════════════════════════════════════
-
-DISCLAIMER:
-This is a screening tool, not a medical diagnosis. Only qualified healthcare
-professionals can diagnose heart disease through comprehensive clinical
-evaluation and testing. Consult with your doctor for proper medical advice.
-
-═══════════════════════════════════════════════════════════════════════
-
-ABOUT THE MODEL:
-Dataset: Heart Disease Dataset
-Source: UCI Machine Learning Repository & Kaggle
-Training Data: 918 patient records from multiple medical institutions
-Features: 11 clinical parameters
-Origin: Cleveland, Hungary, Switzerland, and Long Beach V databases
-
-Created by: Adarsh (E23CSEU1189), Arindam Singh (E23CSEU1171),
-            Yashvardhan Dhaka (E23CSEU1192)
-
-═══════════════════════════════════════════════════════════════════════
-"""
-
-            st.download_button(
-                label="📥 Download Results as Text File",
-                data=results_text,
-                file_name=f"heart_assessment_{pd.Timestamp.now().strftime('%Y%m%d')}.txt",
-                mime="text/plain"
-            )
 
     else:
         st.error(f"Model {model_choice} not found!")
@@ -1199,8 +1076,7 @@ st.markdown(
             Adarsh (E23CSEU1189) • Arindam Singh (E23CSEU1171) • Yashvardhan Dhaka (E23CSEU1192)
         </p>
         <p style="font-size: 0.8rem; opacity: 0.5; margin: 0;">
-            Dataset: Heart Disease Dataset from UCI Machine Learning Repository & Kaggle<br>
-            918 patient records • 11 clinical features • 4 ML models
+            Heart Disease Dataset • 918 patient records • 11 clinical features • 4 ML models
         </p>
     </div>
     """,
