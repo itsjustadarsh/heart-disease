@@ -5,8 +5,8 @@ import pandas as pd
 
 # Page config with custom favicon - MUST BE FIRST
 st.set_page_config(
-    page_title="Heart Disease Prediction",
-    page_icon="⚕️",
+    page_title="HEART SENSE - Cardiovascular Risk Assessment",
+    page_icon="❤️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -570,8 +570,8 @@ st.markdown(
 st.markdown(
     """
     <div class="main-header">
-        <h1>Heart Disease Prediction</h1>
-        <p>AI-powered cardiovascular risk assessment</p>
+        <h1>HEART SENSE</h1>
+        <p>AI-Powered Cardiovascular Risk Assessment</p>
     </div>
     """,
     unsafe_allow_html=True,
@@ -596,8 +596,8 @@ with st.sidebar:
     st.markdown(
         """
         <div class="metric-card" style="margin-bottom: 1rem;">
-            <div class="metric-number">655K</div>
-            <div class="metric-label">Annual Deaths</div>
+            <div class="metric-number">3M+</div>
+            <div class="metric-label">Annual CVD Deaths (India)</div>
         </div>
         """,
         unsafe_allow_html=True
@@ -606,8 +606,50 @@ with st.sidebar:
     st.markdown(
         """
         <div class="metric-card" style="margin-bottom: 1rem;">
-            <div class="metric-number">28%</div>
+            <div class="metric-number">27%</div>
             <div class="metric-label">CVD Death Rate</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("---")
+
+    # Emergency contacts
+    st.markdown("### Emergency Contacts")
+    st.markdown(
+        """
+        <div class="health-tip" style="background: #1a1a1a; border-left: 3px solid #FF4444;">
+            <strong style="color: #FF6B6B;">🚨 Cardiac Emergency</strong><br>
+            <span style="font-size: 1.2rem; font-weight: 600;">102 / 108</span><br>
+            <span style="opacity: 0.8; font-size: 0.85rem;">National Ambulance Services</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        """
+        <div class="health-tip" style="background: #1a1a1a; border-left: 3px solid #FFA500; margin-top: 0.5rem;">
+            <strong style="color: #FFB84D;">📞 All India Helpline</strong><br>
+            <span style="font-size: 1.1rem; font-weight: 600;">1800-180-1104</span><br>
+            <span style="opacity: 0.8; font-size: 0.85rem;">National Health Portal</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("---")
+
+    # Data source
+    st.markdown("### Data Source")
+    st.markdown(
+        """
+        <div class="health-tip" style="background: #1a1a1a; border-left: 3px solid #4ECDC4;">
+            <strong style="color: #4ECDC4;">📊 Dataset</strong><br>
+            <span style="opacity: 0.9; font-size: 0.85rem;">Heart Disease Dataset</span><br>
+            <span style="opacity: 0.7; font-size: 0.8rem;">Source: UCI Machine Learning Repository & Kaggle</span><br>
+            <span style="opacity: 0.7; font-size: 0.8rem;">918 patient records from multiple medical centers</span>
         </div>
         """,
         unsafe_allow_html=True
@@ -683,99 +725,482 @@ if submitted:
                 <div class="result-box result-positive">
                     <h2>High Risk Detected</h2>
                     <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
-                        The {model_choice} model indicates this patient has a high risk of heart disease.
+                        Based on your health parameters, our analysis indicates an elevated risk for cardiovascular disease.
                     </p>
                     <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
                         <div>
                             <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
                                 {risk_score:.1f}%
                             </div>
-                            <div style="opacity: 0.7; font-size: 0.875rem;">Risk Score</div>
+                            <div style="opacity: 0.7; font-size: 0.875rem;">Risk Level</div>
                         </div>
                         {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
                     </div>
-                    <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
-                        Please consult with a healthcare professional for proper evaluation.
-                    </p>
                 </div>
             """,
                 unsafe_allow_html=True,
             )
-
-            # Risk factors analysis
-            st.markdown("### Risk Factor Analysis")
-            risk_factors = []
-            if age > 65: risk_factors.append("Advanced age")
-            if cholesterol > 240: risk_factors.append("High cholesterol")
-            if resting_bp > 140: risk_factors.append("High blood pressure")
-            if exercise_angina == "Yes": risk_factors.append("Exercise-induced angina")
-            if cp in ["Typical Angina", "Atypical Angina"]: risk_factors.append("Chest pain symptoms")
-
-            if risk_factors:
-                for factor in risk_factors:
-                    st.error(f"{factor}")
-            else:
-                st.info("No major risk factors identified in the input data")
-
         else:
             st.markdown(
                 f"""
                 <div class="result-box result-negative">
                     <h2>Low Risk Assessment</h2>
                     <p style="font-size:18px; margin:15px 0; opacity: 0.9;">
-                        The {model_choice} model indicates this patient has a low risk of heart disease.
+                        Your health parameters suggest a lower risk for cardiovascular disease at this time.
                     </p>
                     <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
                         <div>
                             <div style="font-size: 1.8rem; font-weight: 600; color: #FFFFFF;">
                                 {100-risk_score:.1f}%
                             </div>
-                            <div style="opacity: 0.7; font-size: 0.875rem;">Healthy Score</div>
+                            <div style="opacity: 0.7; font-size: 0.875rem;">Health Score</div>
                         </div>
                         {"<div><div style='font-size: 1.8rem; font-weight: 600; color: #FFFFFF;'>" + f"{confidence:.1f}%" + "</div><div style='opacity: 0.7; font-size: 0.875rem;'>Confidence</div></div>" if confidence else ""}
                     </div>
-                    <p style="margin-top: 1rem; font-size: 13px; opacity: 0.6;">
-                        Continue maintaining a healthy lifestyle and regular check-ups.
-                    </p>
                 </div>
             """,
                 unsafe_allow_html=True,
             )
 
-        # Patient Summary Table
-        st.markdown("### Patient Summary")
+        # Identify risk factors for use in tabs
+        risk_factors = []
+        if age > 65: risk_factors.append(("Age over 65", "Age is a significant cardiovascular risk factor"))
+        if cholesterol > 240: risk_factors.append(("Elevated Cholesterol", "Levels above 240 mg/dL increase heart disease risk"))
+        if resting_bp > 140: risk_factors.append(("High Blood Pressure", "Readings above 140 mmHg indicate hypertension"))
+        if exercise_angina == "Yes": risk_factors.append(("Exercise-Induced Chest Pain", "This requires immediate medical attention"))
+        if cp in ["Typical Angina", "Atypical Angina"]: risk_factors.append(("Chest Pain Present", "Any chest discomfort should be evaluated by a doctor"))
+        if max_hr < 100: risk_factors.append(("Low Maximum Heart Rate", "May indicate reduced cardiovascular fitness"))
+        if fasting_bs == 1: risk_factors.append(("Elevated Blood Sugar", "Diabetes increases heart disease risk significantly"))
+        if oldpeak > 2.0: risk_factors.append(("Significant ST Depression", "Indicates potential heart muscle stress"))
 
-        # Create a DataFrame for better presentation
-        summary_data = {
-            "Parameter": ["Age", "Sex", "Chest Pain", "Resting BP", "Cholesterol", "Fasting BS",
-                        "Rest ECG", "Max HR", "Exercise Angina", "Oldpeak", "ST Slope"],
-            "Value": [age, sex, cp, f"{resting_bp} mmHg", f"{cholesterol} mg/dL",
-                     "Yes" if fasting_bs == 1 else "No", restecg, f"{max_hr} bpm",
-                     exercise_angina, oldpeak, st_slope],
-            "Status": ["Normal" if age < 65 else "Risk Factor",
-                      "Normal", "Normal" if cp == "Asymptomatic" else "Risk Factor",
-                      "Normal" if resting_bp < 140 else "Risk Factor",
-                      "Normal" if cholesterol < 240 else "Risk Factor",
-                      "Normal" if fasting_bs == 0 else "Risk Factor",
-                      "Normal" if restecg == "Normal" else "Risk Factor",
-                      "Normal" if max_hr > 100 else "Risk Factor",
-                      "Normal" if exercise_angina == "No" else "Risk Factor",
-                      "Normal" if oldpeak < 2.0 else "Risk Factor",
-                      "Normal"]
-        }
+        # TABS SECTION - Only shown after prediction
+        st.markdown("---")
 
-        df_summary = pd.DataFrame(summary_data)
-        st.dataframe(df_summary, use_container_width=True)
+        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+            "📊 Your Results Explained",
+            "⚠️ Risk Factors",
+            "💪 Action Plan",
+            "🏥 When to Seek Care",
+            "📋 Your Summary"
+        ])
+
+        with tab1:
+            st.markdown("### Understanding Your Results")
+
+            if prediction == 1:
+                st.markdown("""
+                <div class="info-section">
+                    <h4>What does "High Risk" mean?</h4>
+                    <p>Your health measurements show patterns associated with increased likelihood of heart disease. This doesn't mean you currently have heart disease, but that certain factors put you at elevated risk.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown("""
+                <div class="info-section">
+                    <h4>How accurate is this assessment?</h4>
+                    <p>Our analysis tool has been validated on hundreds of patient cases. However, this is a screening tool, not a diagnosis. Only a healthcare provider can diagnose heart disease through comprehensive testing.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown("""
+                <div class="info-section">
+                    <h4>What happens next?</h4>
+                    <p>We strongly recommend scheduling an appointment with a cardiologist or your family physician. Bring these results with you. They may order additional tests such as ECG, 2D Echo, TMT (Treadmill Test), or other cardiac investigations available at most Indian hospitals and diagnostic centers.</p>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown("""
+                <div class="info-section">
+                    <h4>What does "Low Risk" mean?</h4>
+                    <p>Your current health measurements show patterns associated with lower cardiovascular risk. This is positive news, but maintaining heart health requires ongoing effort.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown("""
+                <div class="info-section">
+                    <h4>Should I still see a doctor?</h4>
+                    <p>Yes. Regular health check-ups are essential even with low risk scores. This tool provides guidance but cannot replace professional medical evaluation. Annual preventive health check-ups are recommended for everyone, available at most hospitals and polyclinics across India.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown("""
+                <div class="info-section">
+                    <h4>How do I maintain low risk?</h4>
+                    <p>Continue healthy habits: balanced diet, regular exercise, stress management, and monitoring your blood pressure and cholesterol levels. Prevention is the best medicine.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+        with tab2:
+            st.markdown("### Your Risk Factors")
+
+            if risk_factors:
+                st.markdown(f"""
+                <div class="info-section">
+                    <p>We identified <strong>{len(risk_factors)}</strong> risk factor(s) in your profile. Understanding these can help you take targeted action.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                for i, (factor, explanation) in enumerate(risk_factors, 1):
+                    st.markdown(f"""
+                    <div class="health-tip">
+                        <strong>{i}. {factor}</strong><br>
+                        {explanation}
+                    </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.markdown("""
+                <div class="info-section">
+                    <p>No major risk factors were identified in your current measurements. This is excellent news! Continue maintaining your healthy lifestyle.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+            st.markdown("---")
+            st.markdown("### General Heart Disease Risk Factors")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.markdown("""
+                **Factors You Can Control:**
+                - High blood pressure (hypertension)
+                - High cholesterol (dyslipidemia)
+                - Tobacco use (smoking, gutka, pan masala)
+                - Diabetes or prediabetes
+                - Obesity or being overweight
+                - Physical inactivity/sedentary lifestyle
+                - Unhealthy diet (high oil, salt, sugar)
+                - Excessive alcohol consumption
+                - High stress levels
+                """)
+
+            with col2:
+                st.markdown("""
+                **Factors You Cannot Control:**
+                - Age (risk increases after 45 for men, 55 for women)
+                - Sex (men at higher risk earlier in life)
+                - Family history of heart disease
+                - Previous heart attack or stroke
+                - Genetic factors
+                - South Asian ethnicity (higher CVD risk)
+                """)
+
+        with tab3:
+            st.markdown("### Your Personalized Action Plan")
+
+            if prediction == 1:
+                st.markdown("""
+                <div class="info-section" style="border-left: 3px solid #FF6B6B;">
+                    <h4>🚨 Immediate Actions (This Week)</h4>
+                </div>
+                """, unsafe_allow_html=True)
+
+                immediate_actions = [
+                    "Schedule an appointment with a cardiologist or general physician",
+                    "Print or save these results to share with your doctor",
+                    "Do NOT start any new medications, supplements, or home remedies without medical guidance",
+                    "If experiencing chest pain, shortness of breath, or dizziness, call 102/108 or rush to nearest emergency immediately"
+                ]
+
+                for action in immediate_actions:
+                    st.markdown(f"- ✓ {action}")
+
+                st.markdown("""
+                <div class="info-section" style="border-left: 3px solid #FFA500; margin-top: 1.5rem;">
+                    <h4>📅 Short-term Goals (Next 30 Days)</h4>
+                </div>
+                """, unsafe_allow_html=True)
+
+                if cholesterol > 240:
+                    st.markdown("- **Cholesterol Management**: Reduce ghee, butter, fried foods; increase fiber from dal, oats, vegetables")
+                if resting_bp > 140:
+                    st.markdown("- **Blood Pressure**: Monitor daily, reduce salt and pickles, avoid processed foods")
+                if fasting_bs == 1:
+                    st.markdown("- **Blood Sugar**: Get HbA1c tested, limit rice/wheat portions, avoid sweets and sugary drinks")
+                if max_hr < 100:
+                    st.markdown("- **Fitness**: Start gentle walking/yoga with doctor approval (30 min daily)")
+
+                st.markdown("- **Diet**: Include more vegetables, fruits, whole grains (brown rice, millets), limit oil and salt")
+                st.markdown("- **Exercise**: Aim for 150 minutes per week - walking, yoga, or light jogging (with doctor clearance)")
+                st.markdown("- **Stress**: Practice pranayama, meditation, or yoga for stress management")
+
+                st.markdown("""
+                <div class="info-section" style="border-left: 3px solid #4ECDC4; margin-top: 1.5rem;">
+                    <h4>🎯 Long-term Commitments</h4>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown("- Work with your cardiologist/physician to optimize all cardiovascular risk factors")
+                st.markdown("- Regular monitoring: BP, lipid profile, blood sugar every 3-6 months")
+                st.markdown("- Maintain healthy weight through balanced Indian diet")
+                st.markdown("- Build sustainable heart-healthy habits (yoga, walking, proper diet)")
+                st.markdown("- Consider cardiac rehabilitation program if recommended by doctor")
+
+            else:
+                st.markdown("""
+                <div class="info-section" style="border-left: 3px solid #51CF66;">
+                    <h4>✅ Maintain Your Heart Health</h4>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown("""
+                **Keep Doing What Works:**
+                - Continue your current healthy habits
+                - Regular physical activity (150 minutes/week) - walking, yoga, sports
+                - Heart-healthy diet with vegetables, fruits, whole grains (millets, brown rice)
+                - Maintain healthy weight (BMI 18.5-24.9)
+                - Don't smoke or use tobacco in any form
+                - Limit alcohol consumption
+                - Manage stress through yoga, meditation, or pranayama
+                - Get quality sleep (7-8 hours)
+                """)
+
+                st.markdown("""
+                <div class="info-section" style="margin-top: 1.5rem;">
+                    <h4>📅 Regular Monitoring</h4>
+                    <p>Even with low risk, schedule annual check-ups including:</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.markdown("""
+                - Blood pressure check
+                - Cholesterol panel
+                - Blood glucose screening
+                - BMI and weight assessment
+                - Discussion of family history changes
+                """)
+
+        with tab4:
+            st.markdown("### When to Seek Medical Care")
+
+            st.markdown("""
+            <div class="info-section" style="border-left: 4px solid #FF4444;">
+                <h4>🚨 CALL 102/108 (Ambulance) IMMEDIATELY if you experience:</h4>
+                <p style="opacity: 0.8; font-size: 0.9rem; margin-top: 0.5rem;">
+                Emergency Numbers: 102 (National Ambulance) | 108 (Emergency Services) | Your nearest hospital emergency
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+
+            emergency_symptoms = [
+                "Chest pain or discomfort (pressure, squeezing, fullness)",
+                "Pain spreading to shoulders, arms, back, neck, jaw, or stomach",
+                "Shortness of breath with or without chest discomfort",
+                "Cold sweat, nausea, or lightheadedness",
+                "Sudden severe headache with no known cause",
+                "Sudden weakness or numbness of face, arm, or leg",
+                "Sudden confusion or trouble speaking",
+                "Loss of consciousness or fainting"
+            ]
+
+            for symptom in emergency_symptoms:
+                st.markdown(f"🚨 **{symptom}**")
+
+            st.markdown("---")
+
+            st.markdown("""
+            <div class="info-section" style="border-left: 4px solid #FFA500;">
+                <h4>📞 Call Your Doctor Within 24 Hours if you have:</h4>
+            </div>
+            """, unsafe_allow_html=True)
+
+            urgent_symptoms = [
+                "New or worsening shortness of breath during normal activities",
+                "Irregular heartbeat or heart palpitations",
+                "Unexplained fatigue or weakness",
+                "Swelling in legs, ankles, or feet",
+                "Persistent indigestion or stomach discomfort",
+                "Dizziness or feeling faint"
+            ]
+
+            for symptom in urgent_symptoms:
+                st.markdown(f"⚠️ {symptom}")
+
+            st.markdown("---")
+
+            st.markdown("""
+            <div class="info-section" style="border-left: 4px solid #4ECDC4;">
+                <h4>📅 Schedule Routine Appointment for:</h4>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if prediction == 1:
+                st.markdown("- **This week**: Discuss these risk assessment results with cardiologist")
+                st.markdown("- **Follow-up testing**: ECG, 2D Echo, TMT, or other cardiac investigations")
+                st.markdown("- **Medication review**: If currently taking any heart medications")
+                st.markdown("- **Lifestyle counseling**: Diet, exercise, yoga, and risk reduction strategies")
+            else:
+                st.markdown("- **Annual health check-up**: Even with low risk, yearly preventive check-ups are important")
+                st.markdown("- **Blood work**: Lipid profile, fasting glucose, HbA1c")
+                st.markdown("- **Blood pressure**: Check every 6-12 months if normal")
+                st.markdown("- **General wellness**: Consult about maintaining heart health and lifestyle")
+
+        with tab5:
+            st.markdown("### Your Health Summary")
+
+            # Create a comprehensive summary
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.markdown("#### Your Measurements")
+                summary_data = {
+                    "Parameter": ["Age", "Sex", "Blood Pressure", "Cholesterol", "Blood Sugar", "Max Heart Rate"],
+                    "Value": [
+                        f"{age} years",
+                        sex,
+                        f"{resting_bp} mmHg",
+                        f"{cholesterol} mg/dL",
+                        "Elevated" if fasting_bs == 1 else "Normal",
+                        f"{max_hr} bpm"
+                    ]
+                }
+                df_summary = pd.DataFrame(summary_data)
+                st.dataframe(df_summary, use_container_width=True, hide_index=True)
+
+            with col2:
+                st.markdown("#### Assessment Results")
+                st.markdown(f"**Risk Level:** {'High Risk' if prediction == 1 else 'Low Risk'}")
+                st.markdown(f"**Risk Score:** {risk_score:.1f}%")
+                if confidence:
+                    st.markdown(f"**Assessment Confidence:** {confidence:.1f}%")
+                st.markdown(f"**Total Risk Factors:** {len(risk_factors)}")
+                st.markdown(f"**Assessment Date:** {pd.Timestamp.now().strftime('%Y-%m-%d')}")
+
+            st.markdown("---")
+
+            st.markdown("#### Recommended Next Steps")
+            if prediction == 1:
+                st.markdown("""
+                1. ✓ Schedule appointment with cardiologist or primary care physician
+                2. ✓ Share these results with your healthcare provider
+                3. ✓ Begin implementing lifestyle modifications
+                4. ✓ Monitor symptoms and seek emergency care if needed
+                5. ✓ Follow up on recommended testing
+                """)
+            else:
+                st.markdown("""
+                1. ✓ Continue maintaining healthy lifestyle habits
+                2. ✓ Schedule annual wellness check-up
+                3. ✓ Monitor blood pressure and cholesterol regularly
+                4. ✓ Stay physically active
+                5. ✓ Keep up with preventive care
+                """)
+
+            st.markdown("---")
+
+            st.markdown("""
+            <div class="info-section">
+                <h4>📝 Important Disclaimer</h4>
+                <p>This risk assessment is a screening tool and not a medical diagnosis. Only qualified healthcare professionals can diagnose heart disease through comprehensive clinical evaluation and testing. If you have concerns about your heart health, please consult with your doctor.</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+            st.markdown("---")
+
+            st.markdown("""
+            <div class="info-section">
+                <h4>📊 About the Data</h4>
+                <p><strong>Dataset Source:</strong> UCI Machine Learning Repository & Kaggle</p>
+                <p><strong>Dataset Name:</strong> Heart Disease Dataset</p>
+                <p><strong>Sample Size:</strong> 918 patient records from multiple medical institutions</p>
+                <p><strong>Features:</strong> 11 clinical parameters including age, sex, chest pain type, blood pressure, cholesterol, ECG results, and exercise test data</p>
+                <p><strong>Origin:</strong> Combined dataset from Cleveland, Hungary, Switzerland, and Long Beach V medical databases</p>
+                <p style="opacity: 0.8; font-size: 0.9rem; margin-top: 0.5rem;">This model was trained on validated medical data to identify patterns associated with cardiovascular disease risk.</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Download/Print button
+            st.markdown("#### Save Your Results")
+            results_text = f"""
+╔═══════════════════════════════════════════════════════════════════════╗
+║                    HEART SENSE RISK ASSESSMENT                        ║
+║                  AI-Powered Cardiovascular Screening                  ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+Generated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}
+Model Used: {model_choice}
+
+═══════════════════════════════════════════════════════════════════════
+
+ASSESSMENT RESULTS:
+Risk Level: {'High Risk' if prediction == 1 else 'Low Risk'}
+Risk Score: {risk_score:.1f}%
+Confidence: {confidence:.1f if confidence else 'N/A'}%
+
+═══════════════════════════════════════════════════════════════════════
+
+YOUR MEASUREMENTS:
+• Age: {age} years
+• Sex: {sex}
+• Blood Pressure: {resting_bp} mmHg
+• Cholesterol: {cholesterol} mg/dL
+• Fasting Blood Sugar: {'Elevated' if fasting_bs == 1 else 'Normal'}
+• Max Heart Rate: {max_hr} bpm
+• Chest Pain Type: {cp}
+• Exercise-Induced Angina: {exercise_angina}
+• ST Depression (Oldpeak): {oldpeak}
+• ST Slope: {st_slope}
+• Resting ECG: {restecg}
+
+═══════════════════════════════════════════════════════════════════════
+
+IDENTIFIED RISK FACTORS ({len(risk_factors)}):
+{chr(10).join([f"• {factor}" for factor, _ in risk_factors]) if risk_factors else "None identified"}
+
+═══════════════════════════════════════════════════════════════════════
+
+NEXT STEPS:
+{'• Schedule appointment with cardiologist or general physician\n• Share these results with your doctor\n• Do not start new medications, supplements, or home remedies without medical guidance\n• Emergency: Call 102/108 if experiencing chest pain or shortness of breath' if prediction == 1 else '• Continue healthy lifestyle (yoga, walking, balanced diet)\n• Schedule annual preventive health check-up\n• Monitor blood pressure and cholesterol regularly\n• Maintain healthy weight and stress management'}
+
+═══════════════════════════════════════════════════════════════════════
+
+EMERGENCY CONTACTS (India):
+• Ambulance: 102 / 108
+• National Health Portal: 1800-180-1104
+• Rush to nearest hospital for cardiac emergencies
+
+═══════════════════════════════════════════════════════════════════════
+
+DISCLAIMER:
+This is a screening tool, not a medical diagnosis. Only qualified healthcare
+professionals can diagnose heart disease through comprehensive clinical
+evaluation and testing. Consult with your doctor for proper medical advice.
+
+═══════════════════════════════════════════════════════════════════════
+
+ABOUT THE MODEL:
+Dataset: Heart Disease Dataset
+Source: UCI Machine Learning Repository & Kaggle
+Training Data: 918 patient records from multiple medical institutions
+Features: 11 clinical parameters
+Origin: Cleveland, Hungary, Switzerland, and Long Beach V databases
+
+Created by: Adarsh (E23CSEU1189), Arindam Singh (E23CSEU1171),
+            Yashvardhan Dhaka (E23CSEU1192)
+
+═══════════════════════════════════════════════════════════════════════
+"""
+
+            st.download_button(
+                label="📥 Download Results as Text File",
+                data=results_text,
+                file_name=f"heart_assessment_{pd.Timestamp.now().strftime('%Y%m%d')}.txt",
+                mime="text/plain"
+            )
+
     else:
         st.error(f"Model {model_choice} not found!")
 
 # Footer
 st.markdown("---")
 st.markdown(
-    f"""
+    """
     <div class="glass-card" style="text-align: center; padding: 1.5rem;">
-        <p style="font-size: 0.875rem; opacity: 0.7; margin: 0 0 0.5rem 0;">
-            Created by Adarsh (E23CSEU1189), Arindam Singh (E23CSEU1171), Yashvardhan Dhaka (E23CSEU1192)
+        <p style="font-size: 0.9rem; opacity: 0.7; margin: 0 0 0.75rem 0; font-weight: 500;">
+            Adarsh (E23CSEU1189) • Arindam Singh (E23CSEU1171) • Yashvardhan Dhaka (E23CSEU1192)
+        </p>
+        <p style="font-size: 0.8rem; opacity: 0.5; margin: 0;">
+            Dataset: Heart Disease Dataset from UCI Machine Learning Repository & Kaggle<br>
+            918 patient records • 11 clinical features • 4 ML models
         </p>
     </div>
     """,

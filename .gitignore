@@ -2,7 +2,7 @@
 /.claude
 /.devcontainer
 /.vscode
-
+.claude/
 # Python
 __pycache__/
 *.py[cod]
